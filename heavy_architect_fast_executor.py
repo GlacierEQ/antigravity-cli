@@ -6,10 +6,11 @@ Architect engines (Opus 3.7 / Sonnet 3.7 / Gemini 3.5 Pro) create structured pla
 Fast execution workers (Gemini 3.6 Flash / DeepSeek R1 / MiMo OpenCode) execute at maximum speed and zero/low token cost.
 """
 
+import os
 import sys
 import json
 import time
-from typing import Dict, List, Any, Optional
+from typing import Dict, List, Any, Tuple, Optional
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, SCRIPT_DIR)
