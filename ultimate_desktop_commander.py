@@ -23,6 +23,19 @@ try:
 except Exception:
     pass
 
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, SCRIPT_DIR)
+
+try:
+    from plugin_external_drive import ExternalDrivePlugin
+except Exception:
+    ExternalDrivePlugin = None
+
+try:
+    from plugin_iphone_device import IPhoneDevicePlugin
+except Exception:
+    IPhoneDevicePlugin = None
+
 class UltimateDesktopCommander:
     def __init__(self):
         self.operator_code = os.getenv("OPERATOR_CODE", "OPR-NS8-GE8-KC3-001-AI-GRS-GUID:983DE8C8-E120-1-B5A0-C6D8AF97BB09")
@@ -30,6 +43,9 @@ class UltimateDesktopCommander:
         env_path = Path(env_path_str) if env_path_str else None
         self.workspace_root = env_path if (env_path and env_path.exists()) else Path.home()
         self.display = os.getenv("DISPLAY", ":0")
+        self.drive_plugin = ExternalDrivePlugin() if ExternalDrivePlugin else None
+        self.iphone_plugin = IPhoneDevicePlugin() if IPhoneDevicePlugin else None
+
 
     def _run_cmd(self, cmd: str | List[str]) -> Tuple[str, bool]:
         """Execute command across Linux, macOS, or Windows with full output capture."""
@@ -131,6 +147,10 @@ class UltimateDesktopCommander:
         except Exception as e:
             vault_summary["error"] = str(e)
 
+        # 7. Specialized Plugins Status
+        ext_drives = self.drive_plugin.scan_drives() if self.drive_plugin else []
+        iphone_state = self.iphone_plugin.inspect_device_state() if self.iphone_plugin else {}
+
         return {
             "operator_code": self.operator_code,
             "timestamp": time.time(),
@@ -153,13 +173,27 @@ class UltimateDesktopCommander:
             },
             "storage_volumes": [line.strip() for line in storage_df.splitlines() if line.strip()],
             "ai_tool_matrix": tool_matrix,
-            "cloud_vault": vault_summary
+            "cloud_vault": vault_summary,
+            "plugins": {
+                "external_drive": {
+                    "active": bool(self.drive_plugin),
+                    "connected_drives": ext_drives
+                },
+                "iphone_device": {
+                    "active": bool(self.iphone_plugin),
+                    "state": iphone_state
+                }
+            }
         }
 
 async def main():
     parser = argparse.ArgumentParser(description="Ultimate Desktop Commander")
     parser.add_argument("--activate-supreme", action="store_true", help="Activate Supreme Orchestrator mode")
     parser.add_argument("--resources", "--scan-resources", dest="resources", action="store_true", help="Perform comprehensive multi-layer resource scan")
+    parser.add_argument("--drive", "--drives", dest="drive", action="store_true", help="Inspect external hard drive health, volume, and PC files")
+    parser.add_argument("--drive-heal", dest="drive_heal", type=str, metavar="DISK", help="Safely verify & repair external drive volume (e.g. /dev/disk2s1)")
+    parser.add_argument("--iphone", "--ios", dest="iphone", action="store_true", help="Inspect connected iPhone/iPad, USB forensics, backups, and tethering")
+    parser.add_argument("--plugins", action="store_true", help="List active specialized Desktop Commander plugins")
     parser.add_argument("--reality-manipulation", action="store_true", help="Execute Reality Manipulation Protocol")
     parser.add_argument("--consciousness-elevate", action="store_true", help="Execute Consciousness Elevation Sequence")
     parser.add_argument("--deploy-intelligence", action="store_true", help="Deploy Infinite Intelligence")
@@ -168,7 +202,36 @@ async def main():
     args = parser.parse_args()
     commander = UltimateDesktopCommander()
 
-    if args.resources:
+    if args.drive:
+        print("💾 DESKTOP COMMANDER — EXTERNAL DRIVE MEDIC & INSPECTOR")
+        if commander.drive_plugin:
+            drives = commander.drive_plugin.scan_drives()
+            if not drives:
+                print("⏳ No external drive detected. Plug in USB drive and rerun.")
+            for d in drives:
+                res = commander.drive_plugin.inspect_volume(d["device"])
+                print(json.dumps(res, indent=2))
+        else:
+            print("❌ External drive plugin not available.")
+    elif args.drive_heal:
+        print(f"🛠️ DESKTOP COMMANDER — SAFE VOLUME HEALING: {args.drive_heal}")
+        if commander.drive_plugin:
+            res = commander.drive_plugin.heal_volume(args.drive_heal)
+            print(json.dumps(res, indent=2))
+        else:
+            print("❌ External drive plugin not available.")
+    elif args.iphone:
+        print("📱 DESKTOP COMMANDER — IPHONE & IOS FORENSIC BRIDGE")
+        if commander.iphone_plugin:
+            res = commander.iphone_plugin.inspect_device_state()
+            print(json.dumps(res, indent=2))
+        else:
+            print("❌ iPhone plugin not available.")
+    elif args.plugins:
+        print("🔌 DESKTOP COMMANDER SPECIALIZED PLUGINS:")
+        print("  1. external_drive — Hard Drive Medic, Volume Verification, PC Filesystem Inspector")
+        print("  2. iphone_device  — iPhone / iPad USB Forensic Bridge, State Validator, MobileSync")
+    elif args.resources:
         print("🌌 ULTIMATE DESKTOP COMMANDER — COMPREHENSIVE RESOURCE AUDIT")
         res = await commander.scan_all_resources()
         print(json.dumps(res, indent=2))
@@ -189,4 +252,5 @@ async def main():
 
 if __name__ == "__main__":
     asyncio.run(main())
+
 
