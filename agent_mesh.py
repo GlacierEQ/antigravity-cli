@@ -12,7 +12,11 @@ import json
 import time
 from typing import Dict, List, Any, Optional
 
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, SCRIPT_DIR)
+sys.path.insert(0, os.path.expanduser("~"))
 sys.path.insert(0, "/root")
+
 from supabase_vault_client import SupabaseVaultClient
 from sequential_thinking import SequentialThinkingEngine
 from model_registry import ModelRegistry

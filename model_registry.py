@@ -11,8 +11,12 @@ import sys
 import json
 from typing import Dict, List, Any, Optional
 
-# Integrate with Supabase Vault Client
+# Integrate with Supabase Vault Client (Universal Resolution)
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, SCRIPT_DIR)
+sys.path.insert(0, os.path.expanduser("~"))
 sys.path.insert(0, "/root")
+
 try:
     from supabase_vault_client import SupabaseVaultClient
     vault = SupabaseVaultClient()
@@ -21,7 +25,7 @@ except Exception:
 
 class ModelRegistry:
     def __init__(self, config_path: Optional[str] = None):
-        self.config_path = config_path or "/root/antigravity-cli/models_config.json"
+        self.config_path = config_path or os.path.join(SCRIPT_DIR, "models_config.json")
         self.models: Dict[str, Dict[str, Any]] = {}
         self.providers: Dict[str, Dict[str, Any]] = {}
         self.aliases: Dict[str, str] = {}
