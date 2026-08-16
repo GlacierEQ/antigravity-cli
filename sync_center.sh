@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Antigravity Central Hub Synchronization Engine v1.4 (Universal Portable Edition)
+# Antigravity Central Hub Synchronization Engine v1.5 (Desktop Commander Edition)
 # Keeps the center repository whole, pulls latest updates, syncs key vaults, and auto-heals runtime services.
 
 set -e
@@ -10,7 +10,7 @@ PARENT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 export PYTHONPATH="$SCRIPT_DIR:$PARENT_DIR:$HOME:$PYTHONPATH"
 
 echo "============================================================================"
-echo " 🌌 ANTIGRAVITY CENTRAL HUB SYNCHRONIZATION ENGINE v1.4"
+echo " 🌌 ANTIGRAVITY CENTRAL HUB SYNCHRONIZATION ENGINE v1.5"
 echo "============================================================================"
 
 cd "$SCRIPT_DIR"
@@ -37,6 +37,9 @@ python3 "$SCRIPT_DIR/dynamic_mesh_optimizer.py"
 echo "6. 🧠 Auditing Heavy Architect / Fast Swarm Execution Pipeline..."
 python3 "$SCRIPT_DIR/heavy_architect_fast_executor.py"
 
+echo "7. 🖥️ Auditing Desktop Commander & Display Surface Services..."
+python3 "$SCRIPT_DIR/desktop_commander.py"
+
 echo "============================================================================"
-echo " ✨ CENTRAL HUB & ARCHITECT-SWARM PIPELINE SYNCHRONIZED & READY!"
+echo " ✨ CENTRAL HUB & DESKTOP COMMANDER SYNCHRONIZED & READY!"
 echo "============================================================================"
