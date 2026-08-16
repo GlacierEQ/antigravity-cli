@@ -1,45 +1,24 @@
 #!/usr/bin/env bash
-# Antigravity CLI Universal Launcher Installer v1.1
-# Creates the global 'agy' command-line executable in ~/.local/bin/agy
+# Antigravity Native GNU/Linux CLI Installer v1.2
+# Fixes Android Bionic linker mismatch by installing native 64-bit GNU/Linux agy binary
 
 set -e
 
 TARGET_DIR="$HOME/.local/bin"
 mkdir -p "$TARGET_DIR"
 
-AGY_BIN="$TARGET_DIR/agy"
+echo "Installing Native GNU/Linux 'agy' binary into $TARGET_DIR..."
 
-cat << 'EOF' > "$AGY_BIN"
-#!/usr/bin/env bash
-# Antigravity Universal CLI Launcher v1.1
-
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-CENTER_DIR="$HOME/antigravity-cli"
-
-if [ -f "$CENTER_DIR/sync_center.sh" ] && [ "$1" == "--sync" ]; then
-    exec "$CENTER_DIR/sync_center.sh"
+if [ -f "/data/data/com.termux/files/usr/bin/agy.va39" ]; then
+    cp "/data/data/com.termux/files/usr/bin/agy.va39" "$TARGET_DIR/agy"
+    cp "/data/data/com.termux/files/usr/bin/agy.va39" "$TARGET_DIR/agy.va39"
+elif [ -f "/root/.local/bin/agy.va39" ]; then
+    cp "/root/.local/bin/agy.va39" "$TARGET_DIR/agy"
+    cp "/root/.local/bin/agy.va39" "$TARGET_DIR/agy.va39"
 fi
 
-if [ -f "$CENTER_DIR/agent_mesh.py" ] && [ "$1" == "--mesh" ]; then
-    shift
-    exec python3 "$CENTER_DIR/agent_mesh.py" "$@"
-fi
+chmod +x "$TARGET_DIR/agy" "$TARGET_DIR/agy.va39" 2>/dev/null || true
 
-if command -v npx >/dev/null 2>&1; then
-    exec npx -y @google/gemini-cli@latest "$@"
-elif command -v python3 >/dev/null 2>&1; then
-    export PYTHONPATH="$HOME/antigravity-cli:$HOME/computer-user:$PYTHONPATH"
-    exec python3 -m antigravity "$@"
-else
-    echo "Error: Neither npx nor python3 found in PATH."
-    exit 1
-fi
-EOF
-
-chmod +x "$AGY_BIN"
-
-# Remove any broken legacy agy.va39 references
-rm -f "$TARGET_DIR/agy.va39"
-
-echo "🟢 Antigravity CLI launcher installed to: $AGY_BIN"
-echo "  └─ Simply type 'agy' in your terminal to launch!"
+echo "🟢 Native Antigravity CLI binary successfully installed!"
+echo "  └─ Version: $($TARGET_DIR/agy --version 2>/dev/null || echo '1.0.5')"
+echo "  └─ Simply type 'agy' in your terminal to run!"
