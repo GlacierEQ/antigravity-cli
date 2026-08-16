@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Antigravity Central Hub Synchronization Engine
+# Antigravity Central Hub Synchronization Engine v1.1
 # Keeps the center repository whole, pulls latest updates, syncs key vaults, and auto-heals runtime services.
 
 set -e
@@ -7,7 +7,7 @@ set -e
 CENTER_DIR="/root/antigravity-cli"
 
 echo "============================================================================"
-echo " 🌌 ANTIGRAVITY CENTRAL HUB SYNCHRONIZATION ENGINE v1.0"
+echo " 🌌 ANTIGRAVITY CENTRAL HUB SYNCHRONIZATION ENGINE v1.1"
 echo "============================================================================"
 
 cd "$CENTER_DIR"
@@ -25,6 +25,9 @@ print('Supabase Vault Key Sync -> Verified 443 active keys.')
 echo "3. 🤖 Checking Central Model Registry & Provider Status..."
 python3 "$CENTER_DIR/model_registry.py"
 
+echo "4. 🕸️ Checking Omni Agent Mesh & Free-Tier Agent Suite..."
+python3 "$CENTER_DIR/agent_mesh.py"
+
 echo "============================================================================"
-echo " ✨ CENTRAL HUB SYNCHRONIZED & READY!"
+echo " ✨ CENTRAL HUB & OMNI AGENT MESH SYNCHRONIZED & READY!"
 echo "============================================================================"
