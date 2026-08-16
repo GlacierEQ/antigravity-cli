@@ -14,8 +14,13 @@ export APEX_SKILL_TOKEN_SAVER="ALWAYS_ON"
 export APEX_HEAVY_ARCHITECT_DEFAULT="gemini-3.5-pro"
 export APEX_FAST_SWARM_DEFAULT="gemini-3.6-flash"
 
-# Display auto-detect for Crostini (Sommelier) and Termux-X11
-if [ -n "$WAYLAND_DISPLAY" ] || [ -e "/tmp/.X11-unix/X0" ]; then
+# Display auto-detect for Crostini (Sommelier), Termux-X11, and macOS
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    # On macOS, native Quartz/AppKit is used unless XQuartz is active
+    if [ -e "/tmp/.X11-unix/X0" ]; then
+        export DISPLAY=:0
+    fi
+elif [ -n "$WAYLAND_DISPLAY" ] || [ -e "/tmp/.X11-unix/X0" ]; then
     export DISPLAY=:0
 elif [ -e "/tmp/.X11-unix/X1" ]; then
     export DISPLAY=:1
