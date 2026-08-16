@@ -58,8 +58,32 @@ class ModelRegistry:
             "deepseek": {
                 "name": "DeepSeek AI",
                 "api_key_env": "DEEPSEEK_API_KEY",
-                "vault_keys": ["DEEPSEEK_API_KEY"],
+                "vault_keys": ["DEEPSEEK_API_KEY", "DEEPSEEK_API_KEY2"],
                 "base_url": "https://api.deepseek.com/v1"
+            },
+            "openrouter": {
+                "name": "OpenRouter Free Mesh",
+                "api_key_env": "OPENROUTER_API_KEY",
+                "vault_keys": ["OPENROUTER_API_KEY", "OPENROUTER_API_KEY2", "OPENROUTER_MANAGEMENT_KEY"],
+                "base_url": "https://openrouter.ai/api/v1"
+            },
+            "mimo": {
+                "name": "MiMo Code Engine",
+                "api_key_env": "MIMO_API_KEY",
+                "vault_keys": ["MIMO_API_KEY", "MIMO_V2_PRO_KEY", "MIMO_GLASS_API_KEY"],
+                "base_url": "https://api.mimo.com/v1"
+            },
+            "kilo": {
+                "name": "Kilo Code Engine",
+                "api_key_env": "KILO_CODE_KEY",
+                "vault_keys": ["KILO_CODE_KEY"],
+                "base_url": "https://api.kilo.ai/v1"
+            },
+            "highlight": {
+                "name": "Highlight AI Mesh",
+                "api_key_env": "HIGHLIGHTAI_JWT",
+                "vault_keys": ["HIGHLIGHTAI_JWT", "HIGHLIGHT_AI_TOKEN"],
+                "base_url": "https://api.highlight.ai/v1"
             },
             "local_ollama": {
                 "name": "Local Ollama Engine",
