@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Antigravity Central Hub Synchronization Engine v1.1
+# Antigravity Central Hub Synchronization Engine v1.2
 # Keeps the center repository whole, pulls latest updates, syncs key vaults, and auto-heals runtime services.
 
 set -e
@@ -7,7 +7,7 @@ set -e
 CENTER_DIR="/root/antigravity-cli"
 
 echo "============================================================================"
-echo " 🌌 ANTIGRAVITY CENTRAL HUB SYNCHRONIZATION ENGINE v1.1"
+echo " 🌌 ANTIGRAVITY CENTRAL HUB SYNCHRONIZATION ENGINE v1.2"
 echo "============================================================================"
 
 cd "$CENTER_DIR"
@@ -28,6 +28,9 @@ python3 "$CENTER_DIR/model_registry.py"
 echo "4. 🕸️ Checking Omni Agent Mesh & Free-Tier Agent Suite..."
 python3 "$CENTER_DIR/agent_mesh.py"
 
+echo "5. ⚡ Auditing Dynamic Token-Optimized Mesh Router..."
+python3 "$CENTER_DIR/dynamic_mesh_optimizer.py"
+
 echo "============================================================================"
-echo " ✨ CENTRAL HUB & OMNI AGENT MESH SYNCHRONIZED & READY!"
+echo " ✨ CENTRAL HUB & DYNAMIC TOKEN OPTIMIZER SYNCHRONIZED & READY!"
 echo "============================================================================"
