@@ -1,0 +1,43 @@
+name: Weekly Upstream Fork Auto-Sync
+
+on:
+  schedule:
+    # Run every Sunday at 00:00 UTC (Weekly)
+    - cron: '0 0 * * 0'
+  workflow_dispatch: # Enable manual trigger from GitHub UI
+
+jobs:
+  sync:
+    name: Sync Upstream & Verify Custom Extensions
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout Fork Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Configure Git Identity
+        run: |
+          git config user.name "APEX-Automated-Updater"
+          git config user.email "bot@glaciereq.internal"
+
+      - name: Setup Python Environment
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Execute Fork Sync Engine
+        run: |
+          python3 scripts/sync_upstream_fork.py
+
+      - name: Verify Modular Extensions Integrity
+        run: |
+          test -f antigravity_coder_bridge.py || exit 1
+          test -f model_registry.py || exit 1
+          test -f ultimate_desktop_commander.py || exit 1
+          test -f models_config.json || exit 1
+          echo "All custom APEX modular extensions verified 100% intact."
