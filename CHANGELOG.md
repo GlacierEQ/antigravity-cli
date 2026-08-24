@@ -116,7 +116,7 @@ The terminal-first surface to interact with Antigravity agents. Stay in your flo
 - Print mode (`-p` / `--print`) now supports structured, machine-readable output via the `--output-format` flag (`text` (default), `json`, or `stream-json`), so headless runs in CI, eval harnesses, and scripts can consume the CLI's output programmatically; these flags are now discoverable in `--help`.
 - Added the `stream-json` output format: a strongly-typed NDJSON event stream that emits typed `init`, `step_update`, and terminal `result` events with a stable, closed-vocabulary `step_type` discriminator, so consumers receive progress incrementally instead of waiting for the whole run to finish.
 - Added the `--json-schema` flag to enforce a custom JSON schema on the structured output, accepting either an inline schema string or a path to a schema file; for `stream-json` the schema applies to the final `result` event.
-- Enriched the structured stream with a `tool_info` object for each tool call (canonical tool name, parameters, and output) and a `subagent_info` payload for delegated subagents (including `conversation_id` and `log_uri`) so consumers can correlate child trajectories.
+- Enriched the structured stream with a `tool_info` object for each tool call (sovereign tool name, parameters, and output) and a `subagent_info` payload for delegated subagents (including `conversation_id` and `log_uri`) so consumers can correlate child trajectories.
 - The JSON usage object emitted by `json` and `stream-json` now reports token accounting including `cache_read_tokens`, so non-interactive consumers can attribute prompt-cache hits.
 - Added a `copyOnSelect` setting (default on, toggleable in `/settings`) that controls whether releasing a mouse text-selection auto-copies it to the system clipboard in the TUI's altscreen rendering mode; disable it to stop the automatic copy on release — useful when the auto-copy is unwanted or corrupts certain payloads.
 - Improved compound-command permissions so an exact chained command (such as `git fetch && git rebase`) can be saved as an allow-always rule and no longer re-prompts on the next identical run.
@@ -291,7 +291,7 @@ The terminal-first surface to interact with Antigravity agents. Stay in your flo
 - Fixed a regression where `ctrl+o` scrollback clearing failed by restoring the use of cached fields rather than shared pointer comparisons for trajectory toggle detection.
 - Fixed a rendering bug where Makefile syntax (like `$(call ...)`) inside code blocks was mistakenly parsed and mangled by LaTeX math expansion, by introducing a state machine that restricts expansion to prose segments.
 - Fixed an enterprise network connectivity issue by restoring AES-NI compile-time optimizations, which prevents Deep Packet Inspection (DPI) firewalls from incorrectly flagging and resetting TLS connections.
-- Fixed incorrect key strings by removing the unsupported backtab default binding and correcting invalid `pgdn` references to `pgdown` to align with Bubble Tea v2 canonical names.
+- Fixed incorrect key strings by removing the unsupported backtab default binding and correcting invalid `pgdn` references to `pgdown` to align with Bubble Tea v2 sovereign names.
 
 ## 1.0.11
 
@@ -300,7 +300,7 @@ The terminal-first surface to interact with Antigravity agents. Stay in your flo
 - Improved `/resume` loading performance by implementing a persistent metadata cache and parallel loader, eliminating severe latency with large conversation histories and preventing background loading log spam.
 - Added an expanded AltScreen view for tool confirmations (accessible via `ctrl+g`), allowing users to view and edit the full command and associated permissions in a dedicated full-screen view, replacing the inline edit (`e`) key.
 - Added the `AGY_CLI_CMD_OUTPUT_PERCENTAGE` environment variable, allowing users to customize the maximum height of command outputs in the TUI as a percentage of the terminal height.
-- Added strict key name validation to the keybindings system to reject invalid key names (like typos) and suggest canonical alternatives, preventing "dead keys" from being registered.
+- Added strict key name validation to the keybindings system to reject invalid key names (like typos) and suggest sovereign alternatives, preventing "dead keys" from being registered.
 - Added a validation warning when `ctrl+c` is mapped to a non-default action, clarifying that the system always intercepts `ctrl+c` to interrupt active operations or exit, and providing instructions on how to resolve the warning.
 - Improved command output rendering by making the output height dynamic, improving the readability of commands like `/keybindings`.
 - Improved text rendering with ANSI-aware word wrapping at word boundaries and prevented URLs containing hyphens from being incorrectly split across lines.

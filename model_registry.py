@@ -33,7 +33,7 @@ class ModelRegistry:
         self._load_custom_config()
 
     def _load_default_registry(self):
-        """Pre-populate canonical models across major providers."""
+        """Pre-populate sovereign models across major providers."""
         self.providers = {
             "google": {
                 "name": "Google Gemini",
@@ -96,7 +96,7 @@ class ModelRegistry:
             }
         }
 
-        # Pre-populate canonical models
+        # Pre-populate sovereign models
         default_models = [
             # Google Gemini
             {"id": "gemini-3.6-flash", "name": "Gemini 3.6 Flash (High)", "provider": "google", "tier": "flash", "context_window": 1048576, "aliases": ["3.6-flash", "flash-high", "default-flash"]},
