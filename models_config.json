@@ -44,6 +44,17 @@
       ]
     },
     {
+      "id": "gemini-2.0-flash-exp-free",
+      "name": "Google Gemini 2.0 Flash Exp (Free 1M ctx)",
+      "provider": "openrouter",
+      "tier": "flash",
+      "context_window": 1048576,
+      "aliases": [
+        "gemini-free",
+        "gemini-2-flash"
+      ]
+    },
+    {
       "id": "claude-3-7-sonnet",
       "name": "Claude 3.7 Sonnet (Hybrid Reasoning)",
       "provider": "anthropic",
@@ -108,35 +119,84 @@
       ]
     },
     {
+      "id": "xiaomi-mimo-v2-5-pro",
+      "name": "Xiaomi MiMo v2.5 Pro (1.05M Multimodal Audio/Video/Photo)",
+      "provider": "openrouter",
+      "tier": "pro",
+      "context_window": 1050000,
+      "aliases": [
+        "mimo",
+        "mimo-pro",
+        "mimo-v2.5",
+        "xiaomi-mimo"
+      ]
+    },
+    {
+      "id": "mimo-v2-pro",
+      "name": "MiMo V2 Pro Code Engine",
+      "provider": "mimo",
+      "tier": "pro",
+      "context_window": 128000,
+      "aliases": [
+        "mimo-v2"
+      ]
+    },
+    {
+      "id": "deepseek-r1-free",
+      "name": "DeepSeek R1 Reasoning (164k CoT Free)",
+      "provider": "openrouter",
+      "tier": "pro",
+      "context_window": 163840,
+      "aliases": [
+        "r1",
+        "deepseek-r1",
+        "r1-free"
+      ]
+    },
+    {
+      "id": "deepseek-chat",
+      "name": "DeepSeek V3 671B Chat",
+      "provider": "deepseek",
+      "tier": "pro",
+      "context_window": 128000,
+      "aliases": [
+        "deepseek",
+        "deepseek-v3",
+        "v3"
+      ]
+    },
+    {
       "id": "deepseek-r1-distill-llama-70b",
       "name": "DeepSeek R1 Distill (Groq)",
       "provider": "groq",
       "tier": "pro",
       "context_window": 128000,
       "aliases": [
-        "deepseek-r1",
-        "r1"
+        "r1-groq"
       ]
     },
     {
-      "id": "llama-3.3-70b-versatile",
-      "name": "Llama 3.3 70B (Groq)",
-      "provider": "groq",
+      "id": "meta-llama-3-3-70b-free",
+      "name": "Meta Llama 3.3 70B Instruct (Free)",
+      "provider": "openrouter",
       "tier": "pro",
-      "context_window": 128000,
+      "context_window": 131072,
       "aliases": [
+        "llama",
         "llama-3.3",
         "llama-70b"
       ]
     },
     {
-      "id": "deepseek-chat",
-      "name": "DeepSeek V3 Chat",
-      "provider": "deepseek",
+      "id": "qwen-2-5-coder-32b-free",
+      "name": "Qwen 2.5 Coder 32B (Free)",
+      "provider": "openrouter",
       "tier": "pro",
-      "context_window": 64000,
+      "context_window": 32768,
       "aliases": [
-        "deepseek-v3"
+        "qwen",
+        "qwen-coder",
+        "qwen-32b"
       ]
     },
     {
@@ -146,8 +206,160 @@
       "tier": "flash",
       "context_window": 32768,
       "aliases": [
-        "qwen-coder",
         "local-coder"
+      ]
+    },
+    {
+      "id": "opencode-zen",
+      "name": "OpenCode Zen Primary (DeepSeek Chat)",
+      "provider": "opencode",
+      "tier": "pro",
+      "context_window": 128000,
+      "aliases": [
+        "opencode",
+        "opencode/zen",
+        "zen"
+      ]
+    },
+    {
+      "id": "opencode-r1",
+      "name": "OpenCode DeepSeek R1 Reasoning",
+      "provider": "opencode",
+      "tier": "pro",
+      "context_window": 163840,
+      "aliases": [
+        "opencode/r1"
+      ]
+    },
+    {
+      "id": "opencode-mimo",
+      "name": "OpenCode Xiaomi MiMo v2.5 Pro Multimodal",
+      "provider": "opencode",
+      "tier": "pro",
+      "context_window": 1050000,
+      "aliases": [
+        "opencode/mimo"
+      ]
+    },
+    {
+      "id": "kilo-code-v1",
+      "name": "Kilo Primary Coder (DeepSeek Chat)",
+      "provider": "kilo",
+      "tier": "pro",
+      "context_window": 128000,
+      "aliases": [
+        "kilo",
+        "kilo-code",
+        "kilo/zen"
+      ]
+    },
+    {
+      "id": "kilo-coding",
+      "name": "Kilo Coding Agent (MiMo v2.5 \u00b7 1.05M ctx)",
+      "provider": "kilo",
+      "tier": "pro",
+      "context_window": 1050000,
+      "aliases": [
+        "kilo/coding"
+      ]
+    },
+    {
+      "id": "kilo-analysis",
+      "name": "Kilo Deep Analysis Agent (DeepSeek V4 Pro)",
+      "provider": "kilo",
+      "tier": "pro",
+      "context_window": 1048576,
+      "aliases": [
+        "kilo/analysis"
+      ]
+    },
+    {
+      "id": "kilo-fast",
+      "name": "Kilo Fast Inference Agent (Ling 2.6 Flash)",
+      "provider": "kilo",
+      "tier": "flash",
+      "context_window": 65536,
+      "aliases": [
+        "kilo/fast"
+      ]
+    },
+    {
+      "id": "kilo-creative",
+      "name": "Kilo Creative Writer Agent (Kimi K2.6)",
+      "provider": "kilo",
+      "tier": "pro",
+      "context_window": 262144,
+      "aliases": [
+        "kilo/creative"
+      ]
+    },
+    {
+      "id": "kilo-cloud",
+      "name": "Kilo Cloud Autonomous Agent",
+      "provider": "kilo",
+      "tier": "pro",
+      "context_window": 200000,
+      "aliases": [
+        "kilo/cloud"
+      ]
+    },
+    {
+      "id": "novita-deepseek-v4-pro",
+      "name": "Novita DeepSeek V4 Pro (1.05M Multimodal)",
+      "provider": "novita",
+      "tier": "pro",
+      "context_window": 1048576,
+      "aliases": [
+        "novita-deepseek",
+        "opencode/novita-deepseek-v4",
+        "v4-pro"
+      ]
+    },
+    {
+      "id": "novita-kimi-k3",
+      "name": "Novita Kimi K3 (524k ctx)",
+      "provider": "novita",
+      "tier": "pro",
+      "context_window": 524288,
+      "aliases": [
+        "novita-kimi",
+        "opencode/novita-kimi",
+        "kimi-k3"
+      ]
+    },
+    {
+      "id": "novita-glm-5-3",
+      "name": "Novita GLM 5.3 (1.05M ctx)",
+      "provider": "novita",
+      "tier": "pro",
+      "context_window": 1048576,
+      "aliases": [
+        "novita-glm",
+        "opencode/novita-glm",
+        "glm-5.3"
+      ]
+    },
+    {
+      "id": "novita-qwen-3-8-max",
+      "name": "Novita Qwen 3.8 Max (131k ctx)",
+      "provider": "novita",
+      "tier": "pro",
+      "context_window": 131072,
+      "aliases": [
+        "novita-qwen",
+        "opencode/novita-qwen",
+        "qwen-3.8"
+      ]
+    },
+    {
+      "id": "novita-nemotron-3-nano",
+      "name": "Novita NVIDIA Nemotron 3 Nano",
+      "provider": "novita",
+      "tier": "flash",
+      "context_window": 262144,
+      "aliases": [
+        "novita-nemotron",
+        "opencode/novita-nemotron"
       ]
     },
     {
@@ -159,28 +371,6 @@
       "aliases": [
         "openrouter-free",
         "or-free"
-      ]
-    },
-    {
-      "id": "mimo-v2-pro",
-      "name": "MiMo V2 Pro Code Engine",
-      "provider": "mimo",
-      "tier": "pro",
-      "context_window": 128000,
-      "aliases": [
-        "mimo-pro",
-        "mimo-v2"
-      ]
-    },
-    {
-      "id": "kilo-code-v1",
-      "name": "Kilo Code Refactor Model",
-      "provider": "kilo",
-      "tier": "pro",
-      "context_window": 128000,
-      "aliases": [
-        "kilo-code",
-        "kilo"
       ]
     },
     {
@@ -203,6 +393,8 @@
     "gemini-pro": "gemini-3.5-pro",
     "3.5-flash": "gemini-3.5-flash",
     "flash-lite": "gemini-flash-lite",
+    "gemini-free": "gemini-2.0-flash-exp-free",
+    "gemini-2-flash": "gemini-2.0-flash-exp-free",
     "claude-3.7": "claude-3-7-sonnet",
     "3.7-sonnet": "claude-3-7-sonnet",
     "sonnet-3.7": "claude-3-7-sonnet",
@@ -213,19 +405,54 @@
     "gpt4o": "gpt-4o",
     "4o-mini": "gpt-4o-mini",
     "o3": "o3-mini",
-    "deepseek-r1": "deepseek-r1-distill-llama-70b",
-    "r1": "deepseek-r1-distill-llama-70b",
-    "llama-3.3": "llama-3.3-70b-versatile",
-    "llama-70b": "llama-3.3-70b-versatile",
+    "mimo": "xiaomi-mimo-v2-5-pro",
+    "mimo-pro": "xiaomi-mimo-v2-5-pro",
+    "mimo-v2.5": "xiaomi-mimo-v2-5-pro",
+    "xiaomi-mimo": "xiaomi-mimo-v2-5-pro",
+    "mimo-v2": "mimo-v2-pro",
+    "r1": "deepseek-r1-free",
+    "deepseek-r1": "deepseek-r1-free",
+    "r1-free": "deepseek-r1-free",
+    "deepseek": "deepseek-chat",
     "deepseek-v3": "deepseek-chat",
-    "qwen-coder": "qwen2.5-coder-7b",
+    "v3": "deepseek-chat",
+    "r1-groq": "deepseek-r1-distill-llama-70b",
+    "llama": "meta-llama-3-3-70b-free",
+    "llama-3.3": "meta-llama-3-3-70b-free",
+    "llama-70b": "meta-llama-3-3-70b-free",
+    "qwen": "qwen-2-5-coder-32b-free",
+    "qwen-coder": "qwen-2-5-coder-32b-free",
+    "qwen-32b": "qwen-2-5-coder-32b-free",
     "local-coder": "qwen2.5-coder-7b",
+    "opencode": "opencode-zen",
+    "opencode/zen": "opencode-zen",
+    "zen": "opencode-zen",
+    "opencode/r1": "opencode-r1",
+    "opencode/mimo": "opencode-mimo",
+    "kilo": "kilo-code-v1",
+    "kilo-code": "kilo-code-v1",
+    "kilo/zen": "kilo-code-v1",
+    "kilo/coding": "kilo-coding",
+    "kilo/analysis": "kilo-analysis",
+    "kilo/fast": "kilo-fast",
+    "kilo/creative": "kilo-creative",
+    "kilo/cloud": "kilo-cloud",
+    "novita-deepseek": "novita-deepseek-v4-pro",
+    "opencode/novita-deepseek-v4": "novita-deepseek-v4-pro",
+    "v4-pro": "novita-deepseek-v4-pro",
+    "novita-kimi": "novita-kimi-k3",
+    "opencode/novita-kimi": "novita-kimi-k3",
+    "kimi-k3": "novita-kimi-k3",
+    "novita-glm": "novita-glm-5-3",
+    "opencode/novita-glm": "novita-glm-5-3",
+    "glm-5.3": "novita-glm-5-3",
+    "novita-qwen": "novita-qwen-3-8-max",
+    "opencode/novita-qwen": "novita-qwen-3-8-max",
+    "qwen-3.8": "novita-qwen-3-8-max",
+    "novita-nemotron": "novita-nemotron-3-nano",
+    "opencode/novita-nemotron": "novita-nemotron-3-nano",
     "openrouter-free": "openrouter-free-auto",
     "or-free": "openrouter-free-auto",
-    "mimo-pro": "mimo-v2-pro",
-    "mimo-v2": "mimo-v2-pro",
-    "kilo-code": "kilo-code-v1",
-    "kilo": "kilo-code-v1",
     "highlight-ai": "highlight-ai-mesh",
     "highlight": "highlight-ai-mesh"
   }
