@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 """
-GlacierEQ Resilient Forensic Drive Copier v1.0
+GlacierEQ Resilient Forensic Drive Copier v1.1
 Safely extracts high-priority assets from /Volumes/ShadowDrive to Dropbox.
 Implements I/O timeouts, sector error tolerance, and post-copy SHA-256 verification.
 """
+
+from __future__ import annotations
 
 import os
 import sys
@@ -11,7 +13,8 @@ import subprocess
 import hashlib
 import json
 import time
-from datetime import datetime
+from datetime import datetime, timezone
+from typing import Dict, List, Any, Tuple
 
 SRC = "/Volumes/ShadowDrive"
 DBX_BASE = os.path.expanduser("~/Library/CloudStorage/Dropbox-Cyber.lazer.mermicor")
@@ -30,7 +33,9 @@ TARGET_GROUPS = [
     ("Apple Migration Session State", ["AppleMigration/iCloud_Final/session/t/"])
 ]
 
-def run_cmd(cmd, timeout=30):
+
+def run_cmd(cmd: str, timeout: int = 30) -> Tuple[str, bool]:
+    """Execute shell command with strict timeout."""
     try:
         r = subprocess.run(cmd, shell=True, capture_output=True, text=True, timeout=timeout)
         return r.stdout.strip(), r.returncode == 0
@@ -39,7 +44,9 @@ def run_cmd(cmd, timeout=30):
     except Exception as e:
         return str(e), False
 
-def sha256_file(filepath):
+
+def sha256_file(filepath: str) -> str:
+    """Compute SHA-256 hash of file in chunks."""
     h = hashlib.sha256()
     try:
         with open(filepath, 'rb') as f:
@@ -48,6 +55,7 @@ def sha256_file(filepath):
         return h.hexdigest()
     except Exception as e:
         return f"ERR:{e}"
+
 
 def main():
     print("============================================================================")
@@ -95,28 +103,28 @@ def main():
                     "rel_path": rel,
                     "size_bytes": sz,
                     "sha256": sha,
-                    "mtime_iso": datetime.fromtimestamp(mtime).isoformat()
+                    "mtime_iso": datetime.fromtimestamp(mtime, timezone.utc).isoformat(),
                 })
                 total_preserved += 1
                 total_bytes += sz
             except Exception as e:
                 manifest.append({"rel_path": rel, "error": str(e)})
 
-    manifest_data = {
-        "scan_timestamp": datetime.utcnow().isoformat() + "Z",
+    manifest_data: Dict[str, Any] = {
+        "scan_timestamp": datetime.now(timezone.utc).isoformat(),
         "total_files_preserved": total_preserved,
         "total_bytes_preserved": total_bytes,
         "total_mb": round(total_bytes / (1024 * 1024), 2),
         "dropbox_destination": DEST,
-        "files": manifest
+        "files": manifest,
     }
 
     manifest_local = os.path.join(CODEX_DIR, "SHADOWDRIVE_PRESERVATION_MANIFEST.json")
     manifest_dbx = os.path.join(DEST, "SHADOWDRIVE_PRESERVATION_MANIFEST.json")
 
-    with open(manifest_local, 'w') as f:
+    with open(manifest_local, 'w', encoding="utf-8") as f:
         json.dump(manifest_data, f, indent=2)
-    with open(manifest_dbx, 'w') as f:
+    with open(manifest_dbx, 'w', encoding="utf-8") as f:
         json.dump(manifest_data, f, indent=2)
 
     print(f"\n============================================================================")
@@ -127,6 +135,7 @@ def main():
     print(f"  • Manifest (Local)      : {manifest_local}")
     print(f"  • Manifest (Dropbox)    : {manifest_dbx}")
     print("============================================================================")
+
 
 if __name__ == "__main__":
     main()

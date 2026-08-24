@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
 """
-GlacierEQ Forensic Data Recovery & Asset Triage Engine v1.0
+GlacierEQ Forensic Data Recovery & Asset Triage Engine v1.1
 Target: /Volumes/ShadowDrive -> Dropbox Preservation Target
 Classifies high-value assets (Databases, Git Blobs, Plists, Legal/Forensic Docs, Custom Code),
 extracts schema/records from SQLite databases, checks for dangling Git objects,
-and replicates categorized assets with full SHA-256 cryptographic verification.
+and replicates categorized assets with full SHA-256 cryptographic verification and error logging.
 """
+
+from __future__ import annotations
 
 import os
 import sys
@@ -15,8 +17,9 @@ import hashlib
 import shutil
 import subprocess
 import time
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
+from typing import Dict, List, Any, Tuple
 
 SRC = "/Volumes/ShadowDrive"
 DBX_BASE = os.path.expanduser("~/Library/CloudStorage/Dropbox-Cyber.lazer.mermicor")
@@ -26,7 +29,9 @@ CODEX_DIR = "/Users/kcbflux/Codex"
 os.makedirs(PRESERVE_DIR, exist_ok=True)
 os.makedirs(CODEX_DIR, exist_ok=True)
 
+
 def sha256_file(filepath: str) -> str:
+    """Calculate SHA-256 hash of a file with streaming chunks."""
     h = hashlib.sha256()
     try:
         with open(filepath, 'rb') as f:
@@ -36,10 +41,11 @@ def sha256_file(filepath: str) -> str:
     except Exception as e:
         return f"ERR:{e}"
 
-def classify_file(rel_path: str, size: int) -> tuple[str, str]:
+
+def classify_file(rel_path: str, size: int) -> Tuple[str, str]:
     """Returns (Category, Priority: P0_CRITICAL, P1_HIGH, P2_STANDARD, P3_SYSTEM)"""
     lower = rel_path.lower()
-    
+
     # P0: SQLite Databases, Auth/Identity, Case/Forensic Records
     if lower.endswith(('.db', '.sqlite', '.sqlite3', '.db-wal')):
         return "DATABASE", "P0_CRITICAL"
@@ -47,7 +53,7 @@ def classify_file(rel_path: str, size: int) -> tuple[str, str]:
         return "ICLOUD_MIGRATION", "P0_CRITICAL"
     if any(k in lower for k in ["federal", "forensic", "legal", "audit", "security", "hacking_defense"]):
         return "LEGAL_FORENSIC_DOC", "P0_CRITICAL"
-        
+
     # P1: Source Code, Custom Tooling, Configuration
     if lower.endswith(('.py', '.sh', '.js', '.ts', '.tsx', '.json', '.sql', '.yml', '.yaml')):
         return "SOURCE_CODE", "P1_HIGH"
@@ -61,9 +67,10 @@ def classify_file(rel_path: str, size: int) -> tuple[str, str]:
         return "GIT_METADATA", "P2_STANDARD"
     return "MISC", "P3_SYSTEM"
 
-def inspect_sqlite_db(filepath: str) -> dict:
+
+def inspect_sqlite_db(filepath: str) -> Dict[str, Any]:
     """Inspect tables and row counts of SQLite databases."""
-    info = {"filepath": filepath, "size_bytes": os.path.getsize(filepath), "tables": {}}
+    info: Dict[str, Any] = {"filepath": filepath, "size_bytes": os.path.getsize(filepath), "tables": {}}
     try:
         con = sqlite3.connect(f"file:{filepath}?mode=ro", uri=True)
         cursor = con.cursor()
@@ -74,21 +81,22 @@ def inspect_sqlite_db(filepath: str) -> dict:
                 cursor.execute(f"SELECT COUNT(*) FROM `{t}`;")
                 cnt = cursor.fetchone()[0]
                 info["tables"][t] = cnt
-            except Exception:
-                info["tables"][t] = "ERR"
+            except Exception as e:
+                info["tables"][t] = f"ERR:{e}"
         con.close()
     except Exception as e:
         info["error"] = str(e)
     return info
 
-def extract_dangling_git_objects(src_dir: str, out_dir: str) -> list:
+
+def extract_dangling_git_objects(src_dir: str, out_dir: str) -> List[Dict[str, Any]]:
     """Recovers dangling/lost commits and blobs from Git history."""
     recovered = []
     git_dir = os.path.join(src_dir, ".git")
     if not os.path.exists(git_dir):
         return recovered
-        
-    res = subprocess.run(f"git -C '{src_dir}' fsck --lost-found", shell=True, capture_output=True, text=True)
+
+    subprocess.run(f"git -C '{src_dir}' fsck --lost-found", shell=True, capture_output=True, text=True)
     dangling_dir = os.path.join(git_dir, "lost-found")
     if os.path.exists(dangling_dir):
         dest_git_lost = os.path.join(out_dir, "GIT_LOST_FOUND_RECOVERED")
@@ -97,29 +105,36 @@ def extract_dangling_git_objects(src_dir: str, out_dir: str) -> list:
             for f in files:
                 sp = os.path.join(root, f)
                 dp = os.path.join(dest_git_lost, f)
-                shutil.copy2(sp, dp)
-                recovered.append({"file": f, "size": os.path.getsize(dp)})
+                try:
+                    shutil.copy2(sp, dp)
+                    recovered.append({"file": f, "size": os.path.getsize(dp)})
+                except Exception as e:
+                    sys.stderr.write(f"[ForensicTriage] Warning: could not copy dangling object {f}: {e}\n")
     return recovered
+
 
 def main():
     start_time = time.time()
     print("============================================================================")
     print(" 🛡️ GLACIEREQ FORENSIC DATA RECOVERY & ASSET TRIAGE ENGINE")
     print("============================================================================")
-    
+
     if not os.path.exists(SRC):
         print(f"❌ Target volume '{SRC}' is not mounted.")
         return
 
-    manifest = {
-        "timestamp": datetime.utcnow().isoformat() + "Z",
+    now_iso = datetime.now(timezone.utc).isoformat()
+    manifest: Dict[str, Any] = {
+        "timestamp": now_iso,
         "source_volume": SRC,
         "preservation_dir": PRESERVE_DIR,
         "p0_critical": [],
         "p1_high": [],
         "p2_standard": [],
         "sqlite_audits": [],
-        "git_recovered": []
+        "git_recovered": [],
+        "scan_errors": [],
+        "copy_failures": [],
     }
 
     # Step 1: Scan and categorize
@@ -137,19 +152,19 @@ def main():
                 sz = os.path.getsize(fpath)
                 cat, priority = classify_file(rel_path, sz)
                 sha = sha256_file(fpath)
-                
+
                 record = {
                     "rel_path": rel_path,
                     "category": cat,
                     "priority": priority,
                     "size_bytes": sz,
                     "sha256": sha,
-                    "mtime_iso": datetime.fromtimestamp(os.path.getmtime(fpath)).isoformat()
+                    "mtime_iso": datetime.fromtimestamp(os.path.getmtime(fpath), timezone.utc).isoformat(),
                 }
-                
+
                 total_scanned += 1
                 total_bytes += sz
-                
+
                 if priority == "P0_CRITICAL":
                     manifest["p0_critical"].append(record)
                 elif priority == "P1_HIGH":
@@ -157,7 +172,7 @@ def main():
                 else:
                     manifest["p2_standard"].append(record)
             except Exception as e:
-                pass
+                manifest["scan_errors"].append({"rel_path": rel_path, "error": str(e), "timestamp": time.time()})
 
     print(f"  └─ Total Scanned: {total_scanned:,} files ({total_bytes / (1024*1024):.2f} MB)")
     print(f"  └─ P0 (Critical): {len(manifest['p0_critical'])} files")
@@ -195,35 +210,39 @@ def main():
             copied_count += 1
             copied_bytes += asset["size_bytes"]
         except Exception as e:
-            pass
+            manifest["copy_failures"].append({"rel_path": asset["rel_path"], "error": str(e), "timestamp": time.time()})
 
     print(f"  └─ Successfully Preserved to Dropbox: {copied_count} files ({copied_bytes / (1024*1024):.2f} MB)")
+    if manifest["copy_failures"]:
+        print(f"  └─ ⚠️ Copy Notices: {len(manifest['copy_failures'])} files skipped due to I/O constraints")
 
     # Save Manifest & Report
     manifest_local = os.path.join(CODEX_DIR, "SHADOWDRIVE_RECOVERY_TRIAGE.json")
     manifest_dbx = os.path.join(PRESERVE_DIR, "SHADOWDRIVE_RECOVERY_TRIAGE.json")
     report_md = os.path.join(CODEX_DIR, "SHADOWDRIVE_RECOVERY_REPORT.md")
 
-    with open(manifest_local, 'w') as f:
+    with open(manifest_local, 'w', encoding="utf-8") as f:
         json.dump(manifest, f, indent=2)
-    with open(manifest_dbx, 'w') as f:
+    with open(manifest_dbx, 'w', encoding="utf-8") as f:
         json.dump(manifest, f, indent=2)
 
     elapsed = round(time.time() - start_time, 2)
-    with open(report_md, 'w') as f:
+    with open(report_md, 'w', encoding="utf-8") as f:
         f.write(f"# SHADOWDRIVE FORENSIC RECOVERY & ASSET TRIAGE REPORT\n")
-        f.write(f"**Generated**: {datetime.utcnow().isoformat()}Z | **Runtime**: {elapsed}s\n\n")
+        f.write(f"**Generated**: {now_iso} | **Runtime**: {elapsed}s\n\n")
         f.write(f"## Executive Summary\n")
         f.write(f"- **Source Device**: `/Volumes/ShadowDrive` (4.0 TB APFS Container)\n")
         f.write(f"- **Total Files Scanned**: {total_scanned:,} ({total_bytes / (1024*1024):.2f} MB)\n")
         f.write(f"- **Preserved to Dropbox**: {copied_count} files ({copied_bytes / (1024*1024):.2f} MB)\n")
-        f.write(f"- **Dropbox Target**: `{PRESERVE_DIR}`\n\n")
-        
+        f.write(f"- **Dropbox Target**: `{PRESERVE_DIR}`\n")
+        f.write(f"- **Scan Errors Recorded**: {len(manifest['scan_errors'])}\n")
+        f.write(f"- **Copy Notices Recorded**: {len(manifest['copy_failures'])}\n\n")
+
         f.write(f"## P0 Critical Assets ({len(manifest['p0_critical'])})\n")
         f.write(f"| Rel Path | Category | Size | SHA-256 (First 12) |\n|---|---|---|---|\n")
         for a in manifest['p0_critical']:
             f.write(f"| `{a['rel_path']}` | {a['category']} | {a['size_bytes']:,} B | `{a['sha256'][:12]}` |\n")
-            
+
         f.write(f"\n## SQLite Database Audit\n")
         for db in manifest['sqlite_audits']:
             f.write(f"### Database: `{os.path.basename(db['filepath'])}` ({db['size_bytes']:,} B)\n")
@@ -239,6 +258,7 @@ def main():
     print(f"\n✅ Recovery Report written: {report_md}")
     print(f"✅ Triage Manifest written: {manifest_local} & {manifest_dbx}")
     print("============================================================================")
+
 
 if __name__ == "__main__":
     main()

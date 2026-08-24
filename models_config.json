@@ -44,17 +44,6 @@
       ]
     },
     {
-      "id": "gemini-2.0-flash-exp-free",
-      "name": "Google Gemini 2.0 Flash Exp (Free 1M ctx)",
-      "provider": "openrouter",
-      "tier": "flash",
-      "context_window": 1048576,
-      "aliases": [
-        "gemini-free",
-        "gemini-2-flash"
-      ]
-    },
-    {
       "id": "claude-3-7-sonnet",
       "name": "Claude 3.7 Sonnet (Hybrid Reasoning)",
       "provider": "anthropic",
@@ -119,6 +108,60 @@
       ]
     },
     {
+      "id": "deepseek-r1-distill-llama-70b",
+      "name": "DeepSeek R1 Distill (Groq)",
+      "provider": "groq",
+      "tier": "pro",
+      "context_window": 128000,
+      "aliases": [
+        "r1-groq"
+      ]
+    },
+    {
+      "id": "llama-3.3-70b-versatile",
+      "name": "Llama 3.3 70B (Groq)",
+      "provider": "groq",
+      "tier": "pro",
+      "context_window": 128000,
+      "aliases": [
+        "llama-3.3",
+        "llama-70b"
+      ]
+    },
+    {
+      "id": "deepseek-chat",
+      "name": "DeepSeek V3 671B Chat",
+      "provider": "deepseek",
+      "tier": "pro",
+      "context_window": 128000,
+      "aliases": [
+        "deepseek",
+        "deepseek-v3",
+        "v3"
+      ]
+    },
+    {
+      "id": "qwen2.5-coder-7b",
+      "name": "Qwen 2.5 Coder 7B (Local)",
+      "provider": "local_ollama",
+      "tier": "flash",
+      "context_window": 32768,
+      "aliases": [
+        "local-coder"
+      ]
+    },
+    {
+      "id": "gemini-2.0-flash-exp-free",
+      "name": "Google Gemini 2.0 Flash Exp (Free 1M ctx)",
+      "provider": "openrouter",
+      "tier": "flash",
+      "context_window": 1048576,
+      "aliases": [
+        "gemini-free",
+        "gemini-2-flash"
+      ]
+    },
+    {
       "id": "xiaomi-mimo-v2-5-pro",
       "name": "Xiaomi MiMo v2.5 Pro (1.05M Multimodal Audio/Video/Photo)",
       "provider": "openrouter",
@@ -138,6 +181,7 @@
       "tier": "pro",
       "context_window": 128000,
       "aliases": [
+        "mimo-pro",
         "mimo-v2"
       ]
     },
@@ -151,28 +195,6 @@
         "r1",
         "deepseek-r1",
         "r1-free"
-      ]
-    },
-    {
-      "id": "deepseek-chat",
-      "name": "DeepSeek V3 671B Chat",
-      "provider": "deepseek",
-      "tier": "pro",
-      "context_window": 128000,
-      "aliases": [
-        "deepseek",
-        "deepseek-v3",
-        "v3"
-      ]
-    },
-    {
-      "id": "deepseek-r1-distill-llama-70b",
-      "name": "DeepSeek R1 Distill (Groq)",
-      "provider": "groq",
-      "tier": "pro",
-      "context_window": 128000,
-      "aliases": [
-        "r1-groq"
       ]
     },
     {
@@ -197,16 +219,6 @@
         "qwen",
         "qwen-coder",
         "qwen-32b"
-      ]
-    },
-    {
-      "id": "qwen2.5-coder-7b",
-      "name": "Qwen 2.5 Coder 7B (Local)",
-      "provider": "local_ollama",
-      "tier": "flash",
-      "context_window": 32768,
-      "aliases": [
-        "local-coder"
       ]
     },
     {
@@ -243,14 +255,13 @@
     },
     {
       "id": "kilo-code-v1",
-      "name": "Kilo Primary Coder (DeepSeek Chat)",
+      "name": "Kilo Code Refactor Model",
       "provider": "kilo",
       "tier": "pro",
       "context_window": 128000,
       "aliases": [
-        "kilo",
         "kilo-code",
-        "kilo/zen"
+        "kilo"
       ]
     },
     {
@@ -393,8 +404,6 @@
     "gemini-pro": "gemini-3.5-pro",
     "3.5-flash": "gemini-3.5-flash",
     "flash-lite": "gemini-flash-lite",
-    "gemini-free": "gemini-2.0-flash-exp-free",
-    "gemini-2-flash": "gemini-2.0-flash-exp-free",
     "claude-3.7": "claude-3-7-sonnet",
     "3.7-sonnet": "claude-3-7-sonnet",
     "sonnet-3.7": "claude-3-7-sonnet",
@@ -405,25 +414,27 @@
     "gpt4o": "gpt-4o",
     "4o-mini": "gpt-4o-mini",
     "o3": "o3-mini",
+    "deepseek-r1": "deepseek-r1-free",
+    "r1": "deepseek-r1-free",
+    "llama-3.3": "meta-llama-3-3-70b-free",
+    "llama-70b": "meta-llama-3-3-70b-free",
+    "deepseek-v3": "deepseek-chat",
+    "qwen-coder": "qwen-2-5-coder-32b-free",
+    "local-coder": "qwen2.5-coder-7b",
+    "gemini-free": "gemini-2.0-flash-exp-free",
+    "gemini-2-flash": "gemini-2.0-flash-exp-free",
     "mimo": "xiaomi-mimo-v2-5-pro",
-    "mimo-pro": "xiaomi-mimo-v2-5-pro",
+    "mimo-pro": "mimo-v2-pro",
     "mimo-v2.5": "xiaomi-mimo-v2-5-pro",
     "xiaomi-mimo": "xiaomi-mimo-v2-5-pro",
     "mimo-v2": "mimo-v2-pro",
-    "r1": "deepseek-r1-free",
-    "deepseek-r1": "deepseek-r1-free",
     "r1-free": "deepseek-r1-free",
     "deepseek": "deepseek-chat",
-    "deepseek-v3": "deepseek-chat",
     "v3": "deepseek-chat",
     "r1-groq": "deepseek-r1-distill-llama-70b",
     "llama": "meta-llama-3-3-70b-free",
-    "llama-3.3": "meta-llama-3-3-70b-free",
-    "llama-70b": "meta-llama-3-3-70b-free",
     "qwen": "qwen-2-5-coder-32b-free",
-    "qwen-coder": "qwen-2-5-coder-32b-free",
     "qwen-32b": "qwen-2-5-coder-32b-free",
-    "local-coder": "qwen2.5-coder-7b",
     "opencode": "opencode-zen",
     "opencode/zen": "opencode-zen",
     "zen": "opencode-zen",
