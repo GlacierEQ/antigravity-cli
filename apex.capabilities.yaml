@@ -1,0 +1,12 @@
+schema: apex.capabilities/v1
+repository: glaciereq/antigravity-cli
+status: active
+paradigm: INNOVATION_HOLOGRAPHIC_MESH
+domains:
+  - cli_tooling_and_orchestration
+description: Core Antigravity CLI and multi-agent execution environment.
+epistemic_standard: L0_TO_L5
+evidence_policy: ZERO_FAKE_EXECUTION
+owner_intent:
+  role: specialist_capability_donor
+  precedence: INNOVATION_WINS
