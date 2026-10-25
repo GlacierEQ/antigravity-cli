@@ -1,4 +1,8 @@
 name: Weekly Upstream Fork Auto-Sync
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 
 on:
   schedule:
@@ -10,6 +14,7 @@ jobs:
   sync:
     name: Sync Upstream & Verify Custom Extensions
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     permissions:
       contents: write
 

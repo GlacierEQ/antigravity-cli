@@ -421,6 +421,9 @@
     "deepseek-v3": "deepseek-chat",
     "qwen-coder": "qwen-2-5-coder-32b-free",
     "local-coder": "qwen2.5-coder-7b",
+    "r1-groq": "deepseek-r1-distill-llama-70b",
+    "deepseek": "deepseek-chat",
+    "v3": "deepseek-chat",
     "gemini-free": "gemini-2.0-flash-exp-free",
     "gemini-2-flash": "gemini-2.0-flash-exp-free",
     "mimo": "xiaomi-mimo-v2-5-pro",
@@ -429,9 +432,6 @@
     "xiaomi-mimo": "xiaomi-mimo-v2-5-pro",
     "mimo-v2": "mimo-v2-pro",
     "r1-free": "deepseek-r1-free",
-    "deepseek": "deepseek-chat",
-    "v3": "deepseek-chat",
-    "r1-groq": "deepseek-r1-distill-llama-70b",
     "llama": "meta-llama-3-3-70b-free",
     "qwen": "qwen-2-5-coder-32b-free",
     "qwen-32b": "qwen-2-5-coder-32b-free",
@@ -440,9 +440,8 @@
     "zen": "opencode-zen",
     "opencode/r1": "opencode-r1",
     "opencode/mimo": "opencode-mimo",
-    "kilo": "kilo-code-v1",
     "kilo-code": "kilo-code-v1",
-    "kilo/zen": "kilo-code-v1",
+    "kilo": "kilo-code-v1",
     "kilo/coding": "kilo-coding",
     "kilo/analysis": "kilo-analysis",
     "kilo/fast": "kilo-fast",
@@ -465,6 +464,7 @@
     "openrouter-free": "openrouter-free-auto",
     "or-free": "openrouter-free-auto",
     "highlight-ai": "highlight-ai-mesh",
-    "highlight": "highlight-ai-mesh"
+    "highlight": "highlight-ai-mesh",
+    "kilo/zen": "kilo-code-v1"
   }
 }
